@@ -1,69 +1,62 @@
+const STATUS = {
+  TO_DO: "To Do",
+  DONE: "Done",
+  IN_PROGRESS: "In Progress"
+}
+
+const DEFAULT_STATUS = STATUS.TO_DO;
+
 const list = {
-  "play the ukulele": "To Do",
-  "study JS": "In Progress",
-  "make a bed": "Done",
+  "play the ukulele": STATUS.TO_DO,
+  "study JS": STATUS.IN_PROGRESS,
+  "make a bed": STATUS.DONE,
 };
 
-function changeStatus(task, status) {
-  list[task] = status;
+function changeStatus(name, status) {
+  if (name in list) {
+    list[name] = status;
+  } else {
+    console.log("This task is not in the list.");
+  }
 }
 
-function addTask(task) {
-  list[task] = "To Do";
+function addTask(name) {
+  list[name] = DEFAULT_STATUS;
 }
 
-function deleteTask(task) {
-  delete list[task];
+function deleteTask(name) {
+  if (name in list) {
+    delete list[name];
+  } else {
+    console.log("This task is not in the list.");
+  }
 }
 
 function showList() {
 
-  console.log("To Do:");
-  let countTodo = 0;
-  for (let task in list) {
-    if (list[task] == "To Do") {
-      console.log(' ' + '"' + task + '"' + ',');
-      countTodo++;
-    }
-  }
-  if (countTodo === 0) {
-    console.log('-');
+  const tasks = {
+    [STATUS.TO_DO]: "",
+    [STATUS.IN_PROGRESS]: "",
+    [STATUS.DONE]: "",
   }
 
-  console.log("In Progress:");
-  let countProgress = 0;
-  for (let task in list) {
-    if (list[task] == "In Progress") {
-      console.log(' ' + '"' + task + '"' + ',');
-      countProgress++;
-    }
-  }
-  if (countProgress === 0) {
-    console.log('-');
+  const noTasks = `\n -`;
+
+  for (let name in list) {
+    tasks[list[name]] += `\n "${name}",`;
   }
 
-  console.log("Done:");
-  let countDone = 0;
-  for (let task in list) {
-    if (list[task] == "Done") {
-      console.log(' ' + '"' + task + '"' + ',');
-      countDone++;
-    }
-  }
-  if (countDone === 0) {
-    console.log('-');
-  }
+  console.log(STATUS.TO_DO, `${tasks[STATUS.TO_DO] || noTasks}`);
+  console.log(STATUS.IN_PROGRESS, `${tasks[STATUS.IN_PROGRESS] || noTasks}`);
+  console.log(STATUS.DONE, `${tasks[STATUS.DONE] || noTasks}`);
 }
 
 
 addTask("cook food");
 addTask("study English");
 
-changeStatus("study English", "In Progress");
-changeStatus("study English", "To Do");
-
-changeStatus("cook food", "In Progress");
 changeStatus("cook food", "Done");
+changeStatus("study English", "In Progress");
 
 deleteTask("make a bed");
 deleteTask("cook food");
